@@ -1,0 +1,33 @@
+name: Upload Flask
+
+on:
+  push:
+    branches: 
+      - main
+
+# 이벤트가 발생시 해당 작업들 실행
+jobs:
+  CI-CD:
+    runs-on: ubuntu-latest
+    steps:
+
+    ## docker build & push to production
+    - name: Docker build & push to prod
+      run: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/dotorder_flask .
+          docker push ${{ secrets.DOCKER_USERNAME }}/dotorder_flask
+    ## deploy to productionhibitdb
+    - name: Deploy to prod
+      uses: appleboy/ssh-action@master
+      id: deploy-prod
+      with:
+          host: ${{ secrets.HOST}}
+          username: ubuntu
+          envs: GITHUB_SHA
+          key: ${{ secrets.KEY }}
+          script: |
+              sudo docker rm -f $(docker ps -qa)
+              sudo docker pull ${{ secrets.DOCKER_USERNAME }}/dotorder_flask
+              docker-compose up -d
+              docker image prune -f
