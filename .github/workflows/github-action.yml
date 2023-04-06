@@ -10,7 +10,8 @@ jobs:
   CI-CD:
     runs-on: ubuntu-latest
     steps:
-
+    - uses: actions/checkout@v2
+    
     ## docker build & push to production
     - name: Docker build & push to prod
       run: |
