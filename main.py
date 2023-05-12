@@ -8,18 +8,32 @@ import torch
 import openai
 from gensim.models import keyedvectors
 import pickle
+import os
+from transformers import logging
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+logging.set_verbosity_error()
 
 # load model and tokenizer
 name = "monologg/koelectra-base-v3-discriminator"
 model = ElectraModel.from_pretrained(name)
 tokenizer = ElectraTokenizerFast.from_pretrained(name)
+#base_dir 설정
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # 현재 파일의 절대 경로를 가져옵니다.
+ENGHAN_DIR = os.path.join(BASE_DIR, 'data', 'preprocess', 'eng_han.csv')
+
+
 
 # load keywordExtractor
-key = keywordExtractor(model,tokenizer,dir='data/preprocess/eng_han.csv')
+key = keywordExtractor(model,tokenizer,dir=ENGHAN_DIR)
+
+
 
 # load food data
+FOOD_DIR = os.path.join(BASE_DIR, 'data', 'food_data.csv')
+FOOD2_DIR = os.path.join(BASE_DIR, 'data', 'food_data2.csv')
 #scraping_result = pd.read_csv('data/food_data.csv',encoding='cp949')
-scraping_result = pd.read_csv('data/food_data2.csv')
+scraping_result = pd.read_csv(FOOD2_DIR)
 
 
 ##################################### 따로 만든 함수 #####################################
@@ -103,8 +117,8 @@ def init_function():
 # 메뉴 검색하는 함수
 def search_menu(menu_name, food_name_list, food_keyword_list):
     search = get_keyword_list(menu_name) # 입력된 메뉴에서 키워드 추출
-
-    w2v_model = keyedvectors.load_word2vec_format('data/w2v2')
+    W2V_DIR = os.path.join(BASE_DIR, 'data', 'w2v2')
+    w2v_model = keyedvectors.load_word2vec_format(W2V_DIR)
 
     # 키워드 확장 
     recommand_keyword = w2v_model.most_similar(positive=search, topn=15)
@@ -143,7 +157,7 @@ def search_menu(menu_name, food_name_list, food_keyword_list):
     result  = dict(zip(food_name_list[top_k_idx], total_point[top_k_idx]))
 
     # 음식 정보 추출
-    food_info = pd.read_csv('data/food_data.csv',encoding='cp949')
+    food_info = pd.read_csv(FOOD_DIR,encoding='cp949')
     IDX = food_info.food_name.isin(list(result.keys()))
 
     food_recommandation_result = food_info[["food_name", "food_category"]][IDX].sort_values(
@@ -201,19 +215,19 @@ def extract_keyword_in_main(docs: pd.DataFrame) -> Dict:
 
 
 ##################################### 전체 알고리즘 #####################################
-
-menu_name = "라면" ## 입력
-
-lst = []
-
-with open("data/food_name_data.pickle","rb") as fr:
-    food_name_list = pickle.load(fr)
-
-with open("data/food_keyword_data.pickle","rb") as fr:
-    food_keyword_list = pickle.load(fr)
-
-print('\n\n\n키워드에 따른 상위 20개 음식 추천 결과\n')
-print(search_menu(menu_name, food_name_list, food_keyword_list))
+#
+# menu_name = "라면" ## 입력
+#
+# lst = []
+#
+# with open("data/food_name_data.pickle","rb") as fr:
+#     food_name_list = pickle.load(fr)
+#
+# with open("data/food_keyword_data.pickle","rb") as fr:
+#     food_keyword_list = pickle.load(fr)
+#
+# print('\n\n\n키워드에 따른 상위 20개 음식 추천 결과\n')
+# print(search_menu(menu_name, food_name_list, food_keyword_list))
 
 """if menu_name in food_name:
     print("일치하는 메뉴가 있습니다.")
@@ -226,3 +240,7 @@ if len(lst) == 0:
     print("해당 메뉴가 없습니다.")
 else:
     print(lst)"""
+
+def main_search_menu(menu_name: str):
+    food_name_list, food_keyword_list = init_function()
+    return search_menu(menu_name, food_name_list, food_keyword_list)
