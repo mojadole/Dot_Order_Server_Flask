@@ -1,7 +1,6 @@
 FROM python:latest
 RUN mkdir myapp/
 COPY app.py myapp/app.py
-COPY recoomand.py myapp/recoomand.py
 COPY data myapp/data
 COPY recomand.py myapp/recomand.py
 COPY key_extraction.py myapp/key_extraction.py
