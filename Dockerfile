@@ -2,7 +2,7 @@ FROM python:latest
 RUN mkdir myapp/
 COPY app.py myapp/app.py
 COPY data myapp/data
-COPY recomand.py myapp/recomand.py
+COPY recommand.py myapp/recommand.py
 COPY key_extraction.py myapp/key_extraction.py
 COPY make_pickle.py myapp/make_pickle.py
 COPY model.py myapp/model.py
