@@ -1,8 +1,7 @@
 import flask
 import os
 from flask import Flask,  jsonify, request
-import main
-
+import recommand
 
 app = flask.Flask(__name__)
 
@@ -16,7 +15,7 @@ def search_menu():
     menu_name = request.args.get('menu_name')  # Extract menu_name from query parameters
     if not menu_name:  # If menu_name is not provided
         return jsonify({"error": "Missing menu_name query parameter"}), 400  # Return an error message
-    results = main.main_search_menu(menu_name)  # Call the function in main.py
+    results = recommand.main_search_menu(menu_name)  # Call the function in main.py
     return jsonify(results)  # Return the results as JSON
 
 
