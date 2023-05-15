@@ -7,6 +7,6 @@ packaging==23.1
 pandas==2.0.1
 proto-plus==1.22.2
 protobuf==4.22.1
-sklearn==0.0.post4
+scikit-learn
 torch==2.0.1
 transformers==4.28.1
