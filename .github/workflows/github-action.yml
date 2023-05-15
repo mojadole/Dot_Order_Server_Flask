@@ -3,7 +3,7 @@ name: Upload Flask
 on:
   push:
     branches: 
-      - main
+      - develope
 
 # 이벤트가 발생시 해당 작업들 실행
 jobs:
