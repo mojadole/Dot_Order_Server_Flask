@@ -37,7 +37,7 @@ scraping_result = pd.read_csv(FOOD2_DIR)
 
 
 ##################################### 따로 만든 함수 #####################################
-API_KEY = 'sk' ####### 키
+API_KEY = 'sk-' ####### 키
 
 # chatGPT API 사용 함수
 def callChatGPT(prompt, API_KEY=API_KEY):
@@ -116,17 +116,17 @@ def init_function():
 
 # 메뉴 검색하는 함수
 def search_menu(menu_name, food_name_list, food_keyword_list):
-    search = get_keyword_list(menu_name) # 입력된 메뉴에서 키워드 추출
-    W2V_DIR = os.path.join(BASE_DIR, 'data', 'w2v2')
-    w2v_model = keyedvectors.load_word2vec_format(W2V_DIR)
+    search = get_keyword_list(menu_name)  # 입력된 메뉴에서 키워드 추출
+
+    """w2v_model = keyedvectors.load_word2vec_format('data/w2v2')
 
     # 키워드 확장 
     recommand_keyword = w2v_model.most_similar(positive=search, topn=15)
     np_recommand_keyword = np.array(list(map(lambda x: x[0], recommand_keyword)))
     print('W2V을 활용한 키워드 확장 :', np_recommand_keyword)
-    print('')
+    print('')"""
 
-    # 키워드와 유사한 도서 검색 
+    # 키워드와 유사한 도서 검색
 
     user_point = [int(0)] * len(food_name_list)
 
@@ -135,18 +135,19 @@ def search_menu(menu_name, food_name_list, food_keyword_list):
             if search_key in food_keyword_list[i]:
                 user_point[i] = user_point[i] + int(1)
 
-
-    recommand_point = [int(0)] * len(food_name_list)
+    """recommand_point = [int(0)] * len(food_name_list)
 
     for search_key in np_recommand_keyword:
         for i in range(len(food_name_list)):
-            
+
             if search_key in food_keyword_list[i]:
                 recommand_point[i] = recommand_point[i] + int(1)
 
     total_point = [int(0)] * len(user_point)
     for i in range(len(user_point)):
-        total_point[i] = (user_point[i] * 3) + recommand_point[i]
+        total_point[i] = (user_point[i] * 3) + recommand_point[i]"""
+
+    total_point = user_point
 
     top_k_idx = np.argsort(total_point)[::-1][:20]
 
@@ -154,10 +155,10 @@ def search_menu(menu_name, food_name_list, food_keyword_list):
     food_name_list = np.array(food_name_list)
     total_point = np.array(total_point)
 
-    result  = dict(zip(food_name_list[top_k_idx], total_point[top_k_idx]))
+    result = dict(zip(food_name_list[top_k_idx], total_point[top_k_idx]))
 
     # 음식 정보 추출
-    food_info = pd.read_csv(FOOD_DIR,encoding='cp949')
+    food_info = pd.read_csv(FOOD_DIR, encoding='cp949')
     IDX = food_info.food_name.isin(list(result.keys()))
 
     food_recommandation_result = food_info[["food_name", "food_category"]][IDX].sort_values(
@@ -165,7 +166,6 @@ def search_menu(menu_name, food_name_list, food_keyword_list):
     ).reset_index(drop=True)
 
     return list(food_recommandation_result.food_name)
-
 
 ##################################### 기존 함수 수정한 함수 #####################################
 
