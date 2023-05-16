@@ -37,7 +37,7 @@ scraping_result = pd.read_csv(FOOD2_DIR)
 
 
 ##################################### 따로 만든 함수 #####################################
-API_KEY = 'sk-' ####### 키
+API_KEY = 'sk' ####### 키
 
 # chatGPT API 사용 함수
 def callChatGPT(prompt, API_KEY=API_KEY):
@@ -64,11 +64,11 @@ def obtain_data(menu_name):
     #chat_res_cat = callChatGPT(menu_name + " 는 [밥], [국], [면], [분식] 중에 뭐야")
     #chat_res_cat = chat_res_cat[chat_res_cat.find('[')+1:chat_res_cat.find(']')] # GPT 답변 : 메뉴 카테고리
 
-    #chat_res_des = callChatGPT(menu_name + "한줄 설명") # GPT 답변 : 메뉴 설명
+    chat_res_des = callChatGPT(menu_name + "한줄 설명") # GPT 답변 : 메뉴 설명
 
-    menu_name = "라면"
-    chat_res_cat = "면"
-    chat_res_des = '라면은 말이죠'
+    #menu_name = "라면"
+    #chat_res_cat = "면"
+    #chat_res_des = '라면은 말이죠'
 
     #menu_str = menu_name + " " + chat_res_cat + " " + chat_res_des
     menu_str = menu_name + " " + chat_res_des
