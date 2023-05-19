@@ -37,7 +37,7 @@ scraping_result = pd.read_csv(FOOD2_DIR)
 
 
 ##################################### 따로 만든 함수 #####################################
-API_KEY = 'sk-' ####### 키
+API_KEY = 'sk' ####### 키
 
 # chatGPT API 사용 함수
 def callChatGPT(prompt, API_KEY=API_KEY):
@@ -229,18 +229,21 @@ def extract_keyword_in_main(docs: pd.DataFrame) -> Dict:
 # print('\n\n\n키워드에 따른 상위 20개 음식 추천 결과\n')
 # print(search_menu(menu_name, food_name_list, food_keyword_list))
 
-"""if menu_name in food_name:
-    print("일치하는 메뉴가 있습니다.")
-    lst.append(menu_name)
-
-else :
-    search_menu(menu_name, food_name, food_keyword)
-
-if len(lst) == 0:
-    print("해당 메뉴가 없습니다.")
-else:
-    print(lst)"""
 
 def main_search_menu(menu_name: str):
     food_name_list, food_keyword_list = init_function()
+    lst = []
+    if menu_name in food_name_list:
+        print("일치하는 메뉴가 있습니다.")
+        lst.append(menu_name)
+        return lst
+    else:
+        return search_menu(menu_name, food_name_list, food_keyword_list)
+'''
+    if len(lst) == 0:
+        print("해당 메뉴가 없습니다.")
+    else:
+        print(lst)
+
     return search_menu(menu_name, food_name_list, food_keyword_list)
+    '''

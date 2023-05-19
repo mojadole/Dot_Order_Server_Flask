@@ -8,7 +8,7 @@ app = flask.Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return '5000포트 뭔데;;;;;'
+    return '5000포트'
 
 @app.route('/search_menu', methods=['GET'])
 def search_menu():
