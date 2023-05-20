@@ -232,13 +232,23 @@ def extract_keyword_in_main(docs: pd.DataFrame) -> Dict:
 
 def main_search_menu(menu_name: str):
     food_name_list, food_keyword_list = init_function()
-    lst = []
+    food_name_price_dict = {"야채김밥": 3000, "치즈김밥": 3000 ,"소고기김밥": 3500, "매콤오징어김밥": 3500, "매콤떙초김밥":3500,"참치마요김밥":3500, "참치와사비김밥":3500,
+                            "새우날치알김밥":3500, "어린이김밥": 3000, "된장찌개": 6000, "돼지김치찌개":7000, "순두부찌개":7000, "참치김치찌개": 7000,
+                            "고등어김치찌개": 7000, "꽁치김치찌개":7000, "육개장":7000, "뚝배기불고기": 9000, "김치볶음밥": 7000, "카레덮밥":7000,
+                            "제육덮밥": 8000, "참치볶음밥": 7000,"야채비빔밥":8000,"돌솥비빔밥": 8000,"햄야채볶음밥": 8000, "새우볶음밥":8000,
+                            "새우날치알볶음밥": 8000, "오므라이스":8000, "라면":3500, "콩나물라면":4000, "떡라면":4000,"치즈라면":4000, "만두라면":4000,
+                            "국물떡볶이": 5000,"국물라볶이":5000,"부산오뎅":4000,"부산생생우동": 4000, "고기만두": 3000,"김치만두":3000, "물만두": 3000,
+                            "만두국":7000, "떡만두국": 7000, "후레쉬쫄면": 8000,"등심돈까스":10000,"치즈돈까스":9000,"수제왕돈까스": 9000
+                            }
+    found_menu={}
     if menu_name in food_name_list:
         print("일치하는 메뉴가 있습니다.")
-        lst.append(menu_name)
-        return lst
+        found_menu[menu_name] = food_name_price_dict[menu_name]
     else:
-        return search_menu(menu_name, food_name_list, food_keyword_list)
+        lst = search_menu(menu_name, food_name_list, food_keyword_list)
+        for k in lst:
+            found_menu[k] = food_name_price_dict[k]
+    return found_menu
 '''
     if len(lst) == 0:
         print("해당 메뉴가 없습니다.")
@@ -246,4 +256,5 @@ def main_search_menu(menu_name: str):
         print(lst)
 
     return search_menu(menu_name, food_name_list, food_keyword_list)
+
     '''
