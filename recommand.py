@@ -63,9 +63,7 @@ def obtain_data(menu_name):
 
     #chat_res_cat = callChatGPT(menu_name + " 는 [밥], [국], [면], [분식] 중에 뭐야")
     #chat_res_cat = chat_res_cat[chat_res_cat.find('[')+1:chat_res_cat.find(']')] # GPT 답변 : 메뉴 카테고리
-
-    chat_res_des = callChatGPT(menu_name + "한줄 설명") # GPT 답변 : 메뉴 설명
-
+    chat_res_des = callChatGPT(menu_name + "에 대한 간단한 설명")  # GPT 답변 : 메뉴 설명
     #menu_name = "라면"
     #chat_res_cat = "면"
     #chat_res_des = '라면은 말이죠'
@@ -240,14 +238,14 @@ def main_search_menu(menu_name: str):
                             "국물떡볶이": 5000,"국물라볶이":5000,"부산오뎅":4000,"부산생생우동": 4000, "고기만두": 3000,"김치만두":3000, "물만두": 3000,
                             "만두국":7000, "떡만두국": 7000, "후레쉬쫄면": 8000,"등심돈까스":10000,"치즈돈까스":9000,"수제왕돈까스": 9000
                             }
-    found_menu={}
+    found_menu=[]
     if menu_name in food_name_list:
         print("일치하는 메뉴가 있습니다.")
-        found_menu[menu_name] = food_name_price_dict[menu_name]
+        found_menu.append([menu_name,food_name_price_dict[menu_name]])
     else:
         lst = search_menu(menu_name, food_name_list, food_keyword_list)
         for k in lst:
-            found_menu[k] = food_name_price_dict[k]
+            found_menu.append([k,food_name_price_dict[k]])
     return found_menu
 '''
     if len(lst) == 0:
